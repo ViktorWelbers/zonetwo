@@ -1,0 +1,22 @@
+# ZoneTwo button mapping. Keys: a single character ("w", "1"), or one of
+# tab, space, escape, enter, backspace, shift, control, alt, up, down, left, right, f1-f12.
+# Use "" to leave a button unassigned.
+[keys]
+up = "w"
+down = "s"
+left = "a"
+right = "d"
+a = "1"
+b = "2"
+y = "3"
+z = "4"
+shift_up_right = "5"
+shift_down_right = "6"
+shift_up_left = "tab"
+shift_down_left = "f"
+paddle_right = "space"
+paddle_left = "escape"
+powerup_right = "7"
+powerup_left = "8"
+onoff_right = ""
+onoff_left = ""

@@ -1,0 +1,246 @@
+{
+  "version": 1,
+  "profileName": "WoW ZoneTwo",
+  "keymap": [
+    {
+      "actions": [
+        "navigationUp"
+      ],
+      "logicalKey": "119",
+      "physicalKey": "458778",
+      "trigger": "longPress",
+      "isLongPress": true,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "navigationDown"
+      ],
+      "logicalKey": "115",
+      "physicalKey": "458774",
+      "trigger": "longPress",
+      "isLongPress": true,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "navigationLeft"
+      ],
+      "logicalKey": "97",
+      "physicalKey": "458756",
+      "trigger": "longPress",
+      "isLongPress": true,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "navigationRight"
+      ],
+      "logicalKey": "100",
+      "physicalKey": "458759",
+      "trigger": "longPress",
+      "isLongPress": true,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "a"
+      ],
+      "logicalKey": "49",
+      "physicalKey": "458782",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "b"
+      ],
+      "logicalKey": "50",
+      "physicalKey": "458783",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "y"
+      ],
+      "logicalKey": "51",
+      "physicalKey": "458784",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "z"
+      ],
+      "logicalKey": "52",
+      "physicalKey": "458785",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "shiftUpRight"
+      ],
+      "logicalKey": "53",
+      "physicalKey": "458786",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "shiftDownRight"
+      ],
+      "logicalKey": "54",
+      "physicalKey": "458787",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "shiftUpLeft"
+      ],
+      "logicalKey": "4294967305",
+      "physicalKey": "458795",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "shiftDownLeft"
+      ],
+      "logicalKey": "102",
+      "physicalKey": "458761",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "paddleRight"
+      ],
+      "logicalKey": "32",
+      "physicalKey": "458796",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "paddleLeft"
+      ],
+      "logicalKey": "4294967323",
+      "physicalKey": "458793",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "powerUpRight"
+      ],
+      "logicalKey": "55",
+      "physicalKey": "458788",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    },
+    {
+      "actions": [
+        "powerUpLeft"
+      ],
+      "logicalKey": "56",
+      "physicalKey": "458789",
+      "trigger": "singleClick",
+      "isLongPress": false,
+      "inGameAction": null,
+      "inGameActionValue": null,
+      "androidAction": null,
+      "androidIntentAction": null,
+      "command": null,
+      "screenshotPath": null
+    }
+  ]
+}

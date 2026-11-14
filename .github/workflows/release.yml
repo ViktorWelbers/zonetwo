@@ -1,0 +1,68 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  binaries:
+    strategy:
+      matrix:
+        include:
+          - { os: macos-14,       target: aarch64-apple-darwin,     name: zonetwo-macos-arm64 }
+          - { os: macos-14,       target: x86_64-apple-darwin,      name: zonetwo-macos-x64 }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc,   name: zonetwo-windows-x64 }
+          - { os: ubuntu-latest,  target: x86_64-unknown-linux-gnu, name: zonetwo-linux-x64 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
+      - run: cargo build --release --target ${{ matrix.target }}
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist/${{ matrix.name }}
+          cp zonetwo.toml README.md LICENSE dist/${{ matrix.name }}/
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            cp target/${{ matrix.target }}/release/zonetwo.exe dist/${{ matrix.name }}/
+            cd dist && 7z a ${{ matrix.name }}.zip ${{ matrix.name }}
+          else
+            cp target/${{ matrix.target }}/release/zonetwo dist/${{ matrix.name }}/
+            cd dist && zip -r ${{ matrix.name }}.zip ${{ matrix.name }}
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: dist/${{ matrix.name }}.zip
+
+  addon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package addon
+        run: |
+          sed -i "s/@project-version@/${GITHUB_REF_NAME#v}/" addon/ZoneTwo/ZoneTwo.toc
+          cd addon && zip -r ../ZoneTwo-addon.zip ZoneTwo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: addon
+          path: ZoneTwo-addon.zip
+
+  release:
+    needs: [binaries, addon]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true

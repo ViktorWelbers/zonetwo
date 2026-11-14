@@ -1,0 +1,8 @@
+## Interface: 120105, 120100, 50504, 38000, 20506, 11508, 11509, 16001
+## Title: ZoneTwo
+## Notes: Play with Zwift Ride controllers: soft targeting, interact key and a button cheat-sheet
+## Author: Viktor Welbers
+## Version: @project-version@
+## SavedVariables: ZoneTwoDB
+
+ZoneTwo.lua
