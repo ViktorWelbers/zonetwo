@@ -28,9 +28,9 @@ shift_down_left = "escape"
 paddle_right = "space"
 paddle_left = "f"
 powerup_right = "m"
-powerup_left = ""
-onoff_right = "7"
-onoff_left = "8"
+powerup_left = "7"
+onoff_right = ""
+onoff_left = ""
 "#;
 
 #[derive(serde::Deserialize)]
@@ -157,7 +157,8 @@ mod tests {
         assert_eq!(m["up"], "w");
         assert_eq!(m["paddle_left"], "f");
         assert_eq!(m["powerup_right"], "m");
-        assert!(!m.contains_key("powerup_left"));
+        assert_eq!(m["powerup_left"], "7");
+        assert!(!m.contains_key("onoff_left"));
     }
 
     #[test]

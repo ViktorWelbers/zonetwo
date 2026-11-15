@@ -24,8 +24,7 @@ local MAP = {
     { button = "R paddle",    key = "SPACE",  cmd = "JUMP",               label = "Jump" },
     { button = "L paddle",    key = "F",      cmd = "INTERACTTARGET",     label = "Interact" },
     { button = "R power-up",  key = "M",      cmd = "TOGGLEWORLDMAP",     label = "Map" },
-    { button = "R power btn", key = "7",      cmd = "ACTIONBUTTON7",      label = "Bar 7 (mount)" },
-    { button = "L power btn", key = "8",      cmd = "ACTIONBUTTON8",      label = "Bar 8 (heal/pot)" },
+    { button = "L power-up",  key = "7",      cmd = "ACTIONBUTTON7",      label = "Bar 7 (mount)" },
 }
 
 -- Gamepad-style feel. Values: soft target 3 = always.
