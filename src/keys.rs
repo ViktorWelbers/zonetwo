@@ -57,11 +57,32 @@ pub fn load_mapping(text: &str) -> Result<Mapping> {
     Ok(mapping)
 }
 
+/// A single-character key. On macOS enigo looks characters up in the keyboard layout and takes
+/// the *last* match, so "1" becomes Numpad 1 (games see a different key). Send the main-keyboard
+/// virtual key code instead (ANSI positions).
+#[cfg(target_os = "macos")]
+fn char_key(c: char) -> Key {
+    const ANSI: &[(char, u32)] = &[
+        ('a', 0), ('s', 1), ('d', 2), ('f', 3), ('h', 4), ('g', 5), ('z', 6), ('x', 7), ('c', 8),
+        ('v', 9), ('b', 11), ('q', 12), ('w', 13), ('e', 14), ('r', 15), ('y', 16), ('t', 17),
+        ('1', 18), ('2', 19), ('3', 20), ('4', 21), ('6', 22), ('5', 23), ('=', 24), ('9', 25),
+        ('7', 26), ('-', 27), ('8', 28), ('0', 29), (']', 30), ('o', 31), ('u', 32), ('[', 33),
+        ('i', 34), ('p', 35), ('l', 37), ('j', 38), ('\'', 39), ('k', 40), (';', 41), ('\\', 42),
+        (',', 43), ('/', 44), ('n', 45), ('m', 46), ('.', 47), ('`', 50),
+    ];
+    ANSI.iter().find(|(ch, _)| *ch == c).map_or(Key::Unicode(c), |&(_, code)| Key::Other(code))
+}
+
+#[cfg(not(target_os = "macos"))]
+fn char_key(c: char) -> Key {
+    Key::Unicode(c)
+}
+
 fn parse_key(name: &str) -> Result<Key> {
     let lower = name.to_lowercase();
     let mut chars = lower.chars();
     if let (Some(c), None) = (chars.next(), chars.next()) {
-        return Ok(Key::Unicode(c));
+        return Ok(char_key(c));
     }
     Ok(match lower.as_str() {
         "tab" => Key::Tab,
