@@ -23,9 +23,9 @@ local MAP = {
     { button = "L shift -",   key = "ESCAPE", cmd = nil,                  label = "Clear / close" }, -- default Esc behaviour
     { button = "R paddle",    key = "SPACE",  cmd = "JUMP",               label = "Jump" },
     { button = "L paddle",    key = "F",      cmd = "INTERACTTARGET",     label = "Interact" },
-    { button = "R power btn", key = "M",      cmd = "TOGGLEWORLDMAP",     label = "Map" },
-    { button = "R power-up",  key = "7",      cmd = "ACTIONBUTTON7",      label = "Bar 7 (mount)" },
-    { button = "L power-up",  key = "8",      cmd = "ACTIONBUTTON8",      label = "Bar 8 (heal/pot)" },
+    { button = "R power-up",  key = "M",      cmd = "TOGGLEWORLDMAP",     label = "Map" },
+    { button = "R power btn", key = "7",      cmd = "ACTIONBUTTON7",      label = "Bar 7 (mount)" },
+    { button = "L power btn", key = "8",      cmd = "ACTIONBUTTON8",      label = "Bar 8 (heal/pot)" },
 }
 
 -- Gamepad-style feel. Values: soft target 3 = always.

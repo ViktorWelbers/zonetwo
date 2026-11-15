@@ -43,9 +43,9 @@ Your trainer keeps working in Zwift (or any other app) in ERG mode or at a fixed
 | Left shift − | `Esc` | clear target / close windows |
 | Left paddle | `F` | interact (loot, NPCs, quest objects) |
 | Right paddle | `Space` | jump |
-| Right power button | `M` | open / close the world map |
-| Left power button | – | unassigned |
-| Right / left power-up | `7` / `8` | action bar 7 / 8 (mount, heal) |
+| Right power-up (⚡) | `M` | open / close the world map |
+| Left power-up (⚡) | – | unassigned |
+| Right / left power button (⏻) | `7` / `8` | action bar 7 / 8 (mount, heal) |
 
 ### Custom layout
 
