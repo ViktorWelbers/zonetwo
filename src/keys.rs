@@ -24,13 +24,13 @@ z = "4"
 shift_up_right = "5"
 shift_down_right = "6"
 shift_up_left = "tab"
-shift_down_left = "f"
+shift_down_left = "escape"
 paddle_right = "space"
-paddle_left = "escape"
+paddle_left = "f"
 powerup_right = "7"
 powerup_left = "8"
-onoff_right = ""
-onoff_left = ""
+onoff_right = "g"
+onoff_left = "m"
 "#;
 
 #[derive(serde::Deserialize)]
@@ -155,8 +155,8 @@ mod tests {
     fn default_config_is_valid() {
         let m = load_mapping(DEFAULT_CONFIG).unwrap();
         assert_eq!(m["up"], "w");
-        assert_eq!(m["paddle_left"], "escape");
-        assert!(!m.contains_key("onoff_left"));
+        assert_eq!(m["paddle_left"], "f");
+        assert_eq!(m["onoff_right"], "g");
     }
 
     #[test]
