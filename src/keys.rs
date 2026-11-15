@@ -29,8 +29,8 @@ paddle_right = "space"
 paddle_left = "f"
 powerup_right = "7"
 powerup_left = "8"
-onoff_right = "g"
-onoff_left = "m"
+onoff_right = "m"
+onoff_left = ""
 "#;
 
 #[derive(serde::Deserialize)]
@@ -156,7 +156,8 @@ mod tests {
         let m = load_mapping(DEFAULT_CONFIG).unwrap();
         assert_eq!(m["up"], "w");
         assert_eq!(m["paddle_left"], "f");
-        assert_eq!(m["onoff_right"], "g");
+        assert_eq!(m["onoff_right"], "m");
+        assert!(!m.contains_key("onoff_left"));
     }
 
     #[test]

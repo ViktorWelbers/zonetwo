@@ -23,8 +23,7 @@ local MAP = {
     { button = "L shift -",   key = "ESCAPE", cmd = nil,                  label = "Clear / close" }, -- default Esc behaviour
     { button = "R paddle",    key = "SPACE",  cmd = "JUMP",               label = "Jump" },
     { button = "L paddle",    key = "F",      cmd = "INTERACTTARGET",     label = "Interact" },
-    { button = "L power btn", key = "M",      cmd = "TOGGLEWORLDMAP",     label = "Map" },
-    { button = "R power btn", key = "G",      cmd = "ZONETWO_CONFIRM",    label = "Accept / talk" },
+    { button = "R power btn", key = "M",      cmd = "TOGGLEWORLDMAP",     label = "Map" },
     { button = "R power-up",  key = "7",      cmd = "ACTIONBUTTON7",      label = "Bar 7 (mount)" },
     { button = "L power-up",  key = "8",      cmd = "ACTIONBUTTON8",      label = "Bar 8 (heal/pot)" },
 }
@@ -123,56 +122,6 @@ local function restore()
     ZoneTwoDB.snapshot = nil
     ZoneTwoDB.applied = false
     say("original bindings and settings restored.")
-end
-
--- Confirm dialog (ZONETWO_CONFIRM binding, see Bindings.xml) ----------------
-BINDING_HEADER_ZONETWO = "ZoneTwo"
-BINDING_NAME_ZONETWO_CONFIRM = "Accept quest / confirm dialog"
-
-local function shown(frame) return frame and frame:IsVisible() end
-
-local function confirmQuestFrame()
-    if shown(QuestFrameDetailPanel) then
-        AcceptQuest()
-    elseif shown(QuestFrameProgressPanel) then
-        if IsQuestCompletable() then CompleteQuest() else say("quest isn't complete yet.") end
-    elseif shown(QuestFrameRewardPanel) then
-        local choices = GetNumQuestChoices()
-        if choices <= 1 then GetQuestReward(choices) else say("pick a reward with the mouse.") end
-    elseif shown(QuestFrameGreetingPanel) then
-        for i = 1, GetNumActiveQuests() do
-            if select(2, GetActiveTitle(i)) then SelectActiveQuest(i) return end
-        end
-        if GetNumAvailableQuests() > 0 then SelectAvailableQuest(1)
-        elseif GetNumActiveQuests() > 0 then SelectActiveQuest(1) end
-    end
-end
-
-local function confirmGossip()
-    local G = C_GossipInfo
-    if G and G.GetActiveQuests then
-        for _, q in ipairs(G.GetActiveQuests() or {}) do
-            if q.isComplete then G.SelectActiveQuest(q.questID) return end
-        end
-        local available = G.GetAvailableQuests() or {}
-        if available[1] then G.SelectAvailableQuest(available[1].questID) return end
-        local options = G.GetOptions() or {}
-        if options[1] then G.SelectOption(options[1].gossipOptionID) return end
-        local active = G.GetActiveQuests() or {}
-        if active[1] then G.SelectActiveQuest(active[1].questID) end
-    elseif GetNumGossipAvailableQuests then -- very old clients
-        if GetNumGossipAvailableQuests() > 0 then SelectGossipAvailableQuest(1)
-        elseif GetNumGossipActiveQuests() > 0 then SelectGossipActiveQuest(1)
-        elseif GetNumGossipOptions() > 0 then SelectGossipOption(1) end
-    end
-end
-
-function ZoneTwo_Confirm()
-    if shown(QuestFrame) then
-        confirmQuestFrame()
-    elseif shown(GossipFrame) then
-        confirmGossip()
-    end
 end
 
 -- HUD -----------------------------------------------------------------------

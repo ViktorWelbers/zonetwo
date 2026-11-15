@@ -43,13 +43,9 @@ Your trainer keeps working in Zwift (or any other app) in ERG mode or at a fixed
 | Left shift − | `Esc` | clear target / close windows |
 | Left paddle | `F` | interact (loot, NPCs, quest objects) |
 | Right paddle | `Space` | jump |
-| Left power button | `M` | world map |
-| Right power button | `G` | accept / hand in quest, or pick the first dialog option |
+| Right power button | `M` | open / close the world map |
+| Left power button | – | unassigned |
 | Right / left power-up | `7` / `8` | action bar 7 / 8 (mount, heal) |
-
-The right power button works in a quest window or an NPC's chat window:
-- **Quest window:** it accepts the quest, hands it in, or takes the reward when there's only one to choose. If there are several rewards, pick one with the mouse.
-- **NPC chat window:** it picks the first finished quest, then the first new quest, then the first option.
 
 ### Custom layout
 

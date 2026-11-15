@@ -1,5 +1,0 @@
-<Bindings>
-    <Binding name="ZONETWO_CONFIRM" header="ZONETWO" category="ADDONS">
-        ZoneTwo_Confirm()
-    </Binding>
-</Bindings>
