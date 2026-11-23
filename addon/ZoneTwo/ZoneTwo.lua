@@ -1,13 +1,16 @@
 -- ZoneTwo: play WoW with Zwift Ride controllers (the zonetwo program sends the keys).
--- /zt apply    bind keys + enable soft targeting (snapshot taken first)
--- /zt restore  put original bindings + CVars back
--- /zt autorun  toggle fallback: Up = autorun toggle (if BikeControl can't hold keys)
+-- /zt on       turn controller mode on (temporary override bindings + soft targeting)
+-- /zt off      turn it off: your normal bindings and settings are back
+-- /zt autorun  toggle: Up = autorun toggle instead of hold-to-move
 -- /zt hud      show/hide the button cheat-sheet
+--
+-- Bindings are override bindings: WoW never saves them, so a crash or disconnect
+-- can't change your real key bindings.
 
 local ADDON = ...
 local PREFIX = "|cff33ff99ZoneTwo|r: "
 
--- Ride button -> key BikeControl sends -> WoW binding command
+-- Ride button -> key the zonetwo program sends -> WoW binding command
 local MAP = {
     { button = "Up",          key = "W",      cmd = "MOVEFORWARD",        label = "Forward" },
     { button = "Down",        key = "S",      cmd = "MOVEBACKWARD",       label = "Back" },
@@ -51,76 +54,83 @@ local function setCVar(name, value)
     return SetCVar(name, value)
 end
 
-local function saveBindings()
-    local set = GetCurrentBindingSet and GetCurrentBindingSet() or 1
-    SaveBindings(set)
-end
-
-local function blockedByCombat()
-    if InCombatLockdown() then
-        say("can't change bindings in combat. Try again after combat.")
-        return true
-    end
-end
+local owner = CreateFrame("Frame")
+local pendingAfterCombat
 
 local function upCommand()
     return ZoneTwoDB.autorun and "TOGGLEAUTORUN" or "MOVEFORWARD"
 end
 
-local function apply()
-    if blockedByCombat() then return end
-
-    if not ZoneTwoDB.snapshot then
-        local snap = { bindings = {}, cvars = {} }
-        for _, m in ipairs(MAP) do
-            if m.cmd then snap.bindings[m.key] = GetBindingAction(m.key) or "" end
-        end
-        for name in pairs(CVARS) do snap.cvars[name] = getCVar(name) end
-        ZoneTwoDB.snapshot = snap
-    end
-
-    local bound = 0
+local function setOverrides()
+    ClearOverrideBindings(owner)
     for _, m in ipairs(MAP) do
-        local cmd = m.cmd
-        if m.button == "Up" then cmd = upCommand() end
-        if cmd then
-            if SetBinding(m.key, cmd) then bound = bound + 1
-            else say("could not bind " .. m.key .. " -> " .. cmd) end
-        end
+        local cmd = m.button == "Up" and upCommand() or m.cmd
+        if cmd then SetOverrideBinding(owner, true, m.key, cmd) end
     end
-    saveBindings()
-
-    local changed, missing = {}, {}
-    for name, value in pairs(CVARS) do
-        if getCVar(name) ~= nil then
-            setCVar(name, value)
-            changed[#changed + 1] = name
-        else
-            missing[#missing + 1] = name
-        end
-    end
-
-    ZoneTwoDB.applied = true
-    say(("bound %d keys; set %s"):format(bound, table.concat(changed, ", ")))
-    if #missing > 0 then say("not in this client (skipped): " .. table.concat(missing, ", ")) end
 end
 
-local function restore()
-    if blockedByCombat() then return end
-    local snap = ZoneTwoDB.snapshot
-    if not snap then say("nothing to restore.") return end
+local function applyCVars()
+    ZoneTwoDB.cvarBackup = ZoneTwoDB.cvarBackup or {}
+    local missing = {}
+    for name, value in pairs(CVARS) do
+        local current = getCVar(name)
+        if current == nil then
+            missing[#missing + 1] = name
+        else
+            if ZoneTwoDB.cvarBackup[name] == nil then ZoneTwoDB.cvarBackup[name] = current end
+            setCVar(name, value)
+        end
+    end
+    return missing
+end
 
-    for key, action in pairs(snap.bindings) do
+local function restoreCVars()
+    for name, value in pairs(ZoneTwoDB.cvarBackup or {}) do setCVar(name, value) end
+    ZoneTwoDB.cvarBackup = nil
+end
+
+-- Versions before 0.2 changed the saved bindings directly. Put them back once.
+local function migrateLegacySnapshot()
+    local snap = ZoneTwoDB.snapshot
+    if not snap then return end
+    for key, action in pairs(snap.bindings or {}) do
         if action == "" then SetBinding(key) else SetBinding(key, action) end
     end
-    saveBindings()
-    for name, value in pairs(snap.cvars) do
-        if value ~= nil then setCVar(name, value) end
-    end
+    SaveBindings(GetCurrentBindingSet and GetCurrentBindingSet() or 1)
+    for name, value in pairs(snap.cvars or {}) do setCVar(name, value) end
+    ZoneTwoDB.snapshot, ZoneTwoDB.applied = nil, nil
+    say("restored the key bindings an older ZoneTwo version had changed.")
+end
 
-    ZoneTwoDB.snapshot = nil
-    ZoneTwoDB.applied = false
-    say("original bindings and settings restored.")
+local function runOutOfCombat(fn)
+    if InCombatLockdown() then
+        pendingAfterCombat = fn
+        owner:RegisterEvent("PLAYER_REGEN_ENABLED")
+        say("in combat; will switch after combat.")
+    else
+        fn()
+    end
+end
+
+local function turnOn(quiet)
+    runOutOfCombat(function()
+        setOverrides()
+        local missing = applyCVars()
+        ZoneTwoDB.enabled = true
+        if not quiet then
+            say("controller mode ON. /zt off for your normal keys.")
+            if #missing > 0 then say("not in this client (skipped): " .. table.concat(missing, ", ")) end
+        end
+    end)
+end
+
+local function turnOff()
+    runOutOfCombat(function()
+        ClearOverrideBindings(owner)
+        restoreCVars()
+        ZoneTwoDB.enabled = false
+        say("controller mode OFF. Your normal keys are back.")
+    end)
 end
 
 -- HUD -----------------------------------------------------------------------
@@ -171,29 +181,37 @@ SLASH_ZONETWO1 = "/zt"
 SLASH_ZONETWO2 = "/zonetwo"
 SlashCmdList.ZONETWO = function(msg)
     msg = (msg or ""):lower():match("^%s*(%S*)")
-    if msg == "apply" then
-        apply()
-    elseif msg == "restore" then
-        restore()
+    if msg == "on" or msg == "apply" then
+        turnOn()
+    elseif msg == "off" or msg == "restore" then
+        turnOff()
     elseif msg == "autorun" then
         ZoneTwoDB.autorun = not ZoneTwoDB.autorun
         say("Up button = " .. (ZoneTwoDB.autorun and "autorun toggle" or "hold to move forward"))
-        if ZoneTwoDB.applied then apply() end
+        if ZoneTwoDB.enabled then turnOn(true) end
         refreshHud()
     elseif msg == "hud" then
         ZoneTwoDB.hud = not ZoneTwoDB.hud
         refreshHud()
     else
-        say("/zt apply | restore | autorun | hud")
+        say("/zt on | off | autorun | hud  (now " .. (ZoneTwoDB.enabled and "ON" or "OFF") .. ")")
     end
 end
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:SetScript("OnEvent", function(_, _, name)
-    if name ~= ADDON then return end
-    ZoneTwoDB = ZoneTwoDB or {}
-    if ZoneTwoDB.hud == nil then ZoneTwoDB.hud = true end
-    refreshHud()
-    f:UnregisterEvent("ADDON_LOADED")
+owner:RegisterEvent("ADDON_LOADED")
+owner:RegisterEvent("PLAYER_LOGIN")
+owner:SetScript("OnEvent", function(_, event, name)
+    if event == "ADDON_LOADED" and name == ADDON then
+        ZoneTwoDB = ZoneTwoDB or {}
+        if ZoneTwoDB.hud == nil then ZoneTwoDB.hud = true end
+        refreshHud()
+    elseif event == "PLAYER_LOGIN" then
+        migrateLegacySnapshot()
+        if ZoneTwoDB.enabled then turnOn(true) end
+    elseif event == "PLAYER_REGEN_ENABLED" then
+        owner:UnregisterEvent("PLAYER_REGEN_ENABLED")
+        local fn = pendingAfterCombat
+        pendingAfterCombat = nil
+        if fn then fn() end
+    end
 end)

@@ -28,7 +28,7 @@ Your trainer keeps working in Zwift (or any other app) in ERG mode or at a fixed
    ```
    Then press a button on each controller to wake it. You should see `[Ride left] ready` and `[Ride right] ready`.
 3. **macOS:** allow Bluetooth for your terminal app when asked. Also turn your terminal app on in System Settings → Privacy & Security → **Accessibility**, otherwise key presses are blocked.
-4. In WoW, enable **ZoneTwo** on the AddOns screen. Click into the game window and type `/zt apply`.
+4. In WoW, enable **ZoneTwo** on the AddOns screen. Click into the game window and type `/zt on`.
 5. Ctrl+C in the terminal stops the program and releases every key.
 
 ## Default layout
@@ -55,10 +55,12 @@ Run `zonetwo --print-config > zonetwo.toml` and edit the file. The program looks
 
 | Command | What it does |
 |---|---|
-| `/zt apply` | Binds the keys and turns on soft targeting, interact and auto loot. The first run saves a snapshot of your current settings. |
-| `/zt restore` | Puts your original bindings and settings back. |
+| `/zt on` | Turns controller mode on: the button keys plus soft targeting, interact and auto loot. It stays on across reloads until you turn it off. |
+| `/zt off` | Turns it off. Your normal keys and settings are back. |
 | `/zt autorun` | ↑ toggles autorun instead of holding forward. |
 | `/zt hud` | Shows or hides the button cheat-sheet (drag it to move it). |
+
+ZoneTwo uses temporary override bindings. They're never written to your saved key bindings, so a crash or disconnect can't mess up your normal keys.
 
 ## Troubleshooting
 
